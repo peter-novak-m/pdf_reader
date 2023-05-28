@@ -12,8 +12,8 @@ from langchain.callbacks import get_openai_callback
 
 def main():
     load_dotenv()
-    st.set_page_config(page_title='Ask your pdf')
-    st.header('Ask your pdf')
+    st.set_page_config(page_title='Ask your PDF')
+    st.header('Ask your PDF')
 
     # upload the file
     pdf = st.file_uploader('Please upload your pdf', type='pdf')
@@ -26,10 +26,7 @@ def main():
         for page in pdf_reader.pages:
             text += page.extract_text()
 
-        # st.write(text)
-
         # split into chunks
-
         text_splitter = CharacterTextSplitter(
             separator='\n',
             chunk_size=1000,
@@ -38,6 +35,8 @@ def main():
         )
 
         chunks = text_splitter.split_text(text)
+
+        # If you want to see the split of your document into chunks you can uncomment the following line
         # st.write(chunks)
 
         # We will use FAISS to search for the most similar chunks. This is the Facebook AI Similarity Search library.
@@ -48,6 +47,8 @@ def main():
 
         if user_question:
             docs = knowledge_base.similarity_search(user_question)
+
+            # If you want to see teh 4 (default) most similar chunks you can uncomment the following line
             # st.write(docs)
 
             llm = OpenAI()
